@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.nyh.javatpmodel.dao.OracleDao;
+import com.nyh.javatpmodel.dao.MySqlDao;
 import com.nyh.javatpmodel.model.ConditionModel;
 import com.nyh.javatpmodel.model.ConnectModel;
 import com.nyh.javatpmodel.model.PageModel;
 import com.nyh.javatpmodel.service.DbService;
 
-/**
- * oracle 数据库实现类
- * */
-public class OracleServiceImpl implements DbService {
-	private OracleDao dao;
+public class MySqlServiceImpl implements DbService {
+	private MySqlDao dao;
 	private ConnectModel conn;
 	
 	@Override
@@ -41,7 +38,7 @@ public class OracleServiceImpl implements DbService {
 		page.setTotal(Integer.parseInt(total));//设置总记录数
 		int start = (page.getPage()-1)*page.getRows();//开始行
 		int end = start + page.getRows();//结束行
-		List<Map<String, Object>> list = dao.query(String.format("select * from (select tmp_.*,rownum rown_ from (%s) tmp_ where rownum<=%d) where rown_>%d",sql,end,start), parms);
+		List<Map<String, Object>> list = dao.query(String.format("select * from (%s) limt %d,%d",sql,end,start), parms);
 		page.setResult(list);
 		return page;
 	}
@@ -88,7 +85,7 @@ public class OracleServiceImpl implements DbService {
 	public int delete(String name, ConditionModel condition) {
 		//删除
 		Connect();
-		StringBuffer sql = new StringBuffer(String.format("delete %s ", name));
+		StringBuffer sql = new StringBuffer(String.format("delete from %s ", name));
 		if(condition.getWhere()!=null&&!"".equals(condition.getWhere())){
 			sql.append(String.format(" where %s", condition.getWhere()));
 		}
@@ -112,7 +109,7 @@ public class OracleServiceImpl implements DbService {
 	private void Connect(){
 		//连接数据库
 		if(this.conn!=null&&dao==null){
-			dao = new OracleDao(conn.getUrl(),conn.getName(),conn.getPass());
+			dao = new MySqlDao(conn.getUrl(),conn.getName(),conn.getPass());
 		}
 	}
 	
@@ -150,7 +147,7 @@ public class OracleServiceImpl implements DbService {
 	
 	private List<String> getCols(String name){
 		//获取列名集合
-		List<Map<String, Object>> col = dao.query("select column_name from user_tab_columns where table_name = ? ",name.toUpperCase());
+		List<Map<String, Object>> col = dao.query("desc "+name);
 		List<String> cols = new ArrayList<String>();
 		if(col==null||col.size()==0) new Exception(String.format("【%s】表不存在", name)).printStackTrace();
 		for(Map<String, Object> row : col){
@@ -158,5 +155,5 @@ public class OracleServiceImpl implements DbService {
 		}
 		return cols;
 	}
-
+	
 }

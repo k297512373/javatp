@@ -10,6 +10,7 @@ import com.nyh.javatpmodel.model.ConditionModel;
 import com.nyh.javatpmodel.model.ConnectModel;
 import com.nyh.javatpmodel.model.PageModel;
 import com.nyh.javatpmodel.service.DbService;
+import com.nyh.javatpmodel.service.impl.MySqlServiceImpl;
 import com.nyh.javatpmodel.service.impl.OracleServiceImpl;
 
 /**
@@ -65,7 +66,8 @@ public class Model {
 	
 	/**设置为mysql模式*/
 	public Model MySqlModel(){
-		new Exception("暂未编写mysql模式").printStackTrace();;
+		db = new MySqlServiceImpl();
+		db.setConnect(connect);
 		return this;
 	}
 	/**设置查询,更新插入删除操作的表格,默认别名A,会清除联合查询添加的表名*/

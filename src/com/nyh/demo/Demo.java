@@ -12,7 +12,7 @@ import com.nyh.javatp.model.Model;
 public class Demo {
 
 	public static void main(String[] args) {
-		//实例化
+		/*//实例化
 		Model m = new Model();
 		m.setConn("jdbc:oracle:thin:@127.0.0.1:1521:orcl", "train", "train");//设置数据库连接
 		m.OracleModel();//设定为oracle模式
@@ -61,7 +61,17 @@ public class Demo {
 		
 		//删除
 		m.delete();
-		show(m.select(),"删除后结果");
+		show(m.select(),"删除后结果");*/
+		
+		Model m = new Model();
+		m.setConn("jdbc:mysql://localhost:3306/pic?useSSL=false", "root", "root");//设置数据库连接
+		m.MySqlModel();
+		//show(m.From("pic_baidu_face_task").select(),"mysql模式");
+		Map<String, Object> parms = new  HashMap<String, Object>();
+		parms.put("k", "k");
+		parms.put("v","13");
+		m.From("test").where("k=:k").put(parms).update();
+		show(m.select(),"修改测试");
 	}
 	
 	private static void show(Map<String, Object> map,String title){
