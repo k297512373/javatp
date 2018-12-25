@@ -47,7 +47,7 @@
 		
 		//删除
 		m.delete();
-		show(m.select(),"删除后结果");*/
+		show(m.select(),"删除后结果");
 		
 		Model m = new Model();
 		m.setConn("jdbc:mysql://localhost:3306/pic?useSSL=false", "root", "root");//设置数据库连接
