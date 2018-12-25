@@ -1,4 +1,4 @@
-##javatp
+# javatp
 		//实例化
 		Model m = new Model();
 		m.setConn("jdbc:oracle:thin:@127.0.0.1:1521:orcl", "train", "train");//设置数据库连接
